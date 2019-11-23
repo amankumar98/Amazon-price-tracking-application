@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import smtplib
+import time
 
 
 URL = 'https://www.amazon.com/Sony-Alpha-a6400-Mirrorless-Camera/dp/B07MV3P7M8/ref=sr_1_3?keywords=sony+a6400&qid=1574330660&sr=8-3'
@@ -19,7 +21,33 @@ def check_price():
         send_mail()
 
     print(converted_price)
+    print(title.strip())
 
+    if(converted_price < 800):
+        send_mail()
 
 def send_mail():
-    
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+
+    server.login('amankumar1998official@gmail.com', 'wgfjlcitvvykjhre')
+
+    subject = 'Price fell down!'
+    body = 'Cheek out the link https://www.amazon.com/Sony-Alpha-a6400-Mirrorless-Camera/dp/B07MV3P7M8/ref=sr_1_3?keywords=sony+a6400&qid=1574330660&sr=8-3'
+
+    msg = f"Subject: {subject} \n\n {body}"
+
+    server.sendmail(
+        'amankumar1998official@gmail.com',
+        'amankumar@mail.sfsu.edu',
+        msg
+    )
+    print('Hey email has been sent')
+
+    server.quit()
+
+while(True):
+    check_price()
+    time.sleep(60 * 60 * 24)
